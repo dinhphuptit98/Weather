@@ -31,30 +31,38 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         if weather.name == "Hanoi" {
             nameText.text = "Hà Nội"
         }
-        if weather.text == "Partly cloudy"{
-            inforText.text = "Ít Mây"
+        inforText.text = weather.text
+        if inforText.text == "Trời quang"{
+            
+            inforText.textColor = UIColor.black
+            nameText.textColor = UIColor.black
+            tempText.textColor = UIColor.yellow
+            backgr.image = #imageLiteral(resourceName: "sun")
+        }
+        if inforText.text == "Có Mây"{
+            
             inforText.textColor = UIColor.black
             nameText.textColor = UIColor.black
             tempText.textColor = UIColor.yellow
             backgr.image = #imageLiteral(resourceName: "cloud")
+
         }
-        if weather.text == "Light rain shower"{
-            inforText.text = "Mưa Rào"
-            inforText.textColor = UIColor.white
-            nameText.textColor = UIColor.white
-            tempText.textColor = UIColor.yellow
-            backgr.image = #imageLiteral(resourceName: "rain")
+        if inforText.text == "Các cơn giông tố nổi lên gần đó" {
             
-        }
-        else if weather.text == "Thundery outbreaks possible" {
-            inforText.text = "Có Thể Xảy Ra Sấm Sét"
             inforText.textColor = UIColor.white
             nameText.textColor = UIColor.white
             tempText.textColor = UIColor.yellow
             backgr.image = #imageLiteral(resourceName: "thunder")
         }
-        else {
-            inforText.text = "Mưa Lớn Nặng Hạt"
+        if inforText.text == "Mưa rào nhẹ" {
+            
+            inforText.textColor = UIColor.white
+            nameText.textColor = UIColor.white
+            tempText.textColor = UIColor.yellow
+            backgr.image = #imageLiteral(resourceName: "rain")
+        }
+        if inforText.text == "Mưa rào vừa hoặc nặng hạt" {
+            
             inforText.textColor = UIColor.white
             nameText.textColor = UIColor.white
             tempText.textColor = UIColor.yellow
@@ -66,6 +74,7 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         
         tableView.reloadData()
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

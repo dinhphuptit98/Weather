@@ -14,7 +14,7 @@ class DataService {
     var weather: Weather?
     
     func getData() {
-        let urlString = "http://api.apixu.com/v1/forecast.json?key=c34dc1a7180545b381731540181705&q=Hanoi&days=8"
+        let urlString = "http://api.apixu.com/v1/forecast.json?key=9e44af53443843b3bcc03842181705&q=Hanoi&days=7&lang=vi"
         let url = URL(string : urlString)!
         
         let urlRequest = URLRequest(url: url)
