@@ -8,24 +8,37 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
+class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource ,UICollectionViewDelegate,UICollectionViewDataSource{
+    
+    
+    
+    
+    
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var nameText: UILabel!
     @IBOutlet weak var inforText: UILabel!
     @IBOutlet weak var tempText: UILabel!
     @IBOutlet weak var backgr: UIImageView!
+    @IBOutlet weak var dateAtNow: UILabel!
+    @IBOutlet weak var collectionHeaderView: UICollectionView!
+    
+    let timeAtNow = Date()
     
     var weatherdays : [WeatherDay] = []
+    var weatherhours : [Weather24h] = []
     
     override func viewDidLoad() {
-        
+        dateAtNow.text = "\(timeAtNow)"
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self , selector: #selector(handler), name: Notification.Name.init("update"), object: nil)
-        DataService.shared.getData()
+        NotificationCenter.default.addObserver(self , selector: #selector(handler1), name: Notification.Name.init("update1"), object: nil)
+        DataService.shared.getDataDay()
+        
+        NotificationCenter.default.addObserver(self , selector: #selector(handler2), name: Notification.Name.init("update2"), object: nil)
+        DataService.shared.getDataHour()
         // Do any additional setup after loading the view.
     }
-    @objc func handler(){
+    @objc func handler1(){
         guard let weather = DataService.shared.weather else { return  }
         weatherdays = weather.weatherDays
         if weather.name == "Hanoi" {
@@ -71,35 +84,63 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         
         tempText.text = "\(weather.temp_c) ℃ "
         
-        
         tableView.reloadData()
     }
     
+    @objc func handler2() {
+        guard let hour = DataService.shared.weatherOneDay else { return  }
+        weatherhours = hour.weatherHours
+        collectionHeaderView.reloadData()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    // table View , show at cell
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return weatherdays.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
-        
+        cell.date.text = weatherdays[indexPath.row].date_epoch.toDate
+        let toDay = Date()
+        let format = DateFormatter()
+        format.dateFormat = "YYYY-MMMM-d"
+        format.string(from: toDay)
+        if weatherdays[indexPath.row].date_epoch.toDay == format.string(from: toDay){
+            cell.date.text = "HÔM NAY"
+            cell.date.textColor = UIColor.red
+        }
+
         cell.minTemp.text = "\(weatherdays[indexPath.row].mintemp_c) ℃"
         cell.maxTemp.text = "\(weatherdays[indexPath.row].maxtemp_c) ℃"
         cell.icon.download(from: weatherdays[indexPath.row].icon)
         return cell
+        
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return collectionHeaderView
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 150
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    
+    // colectionView
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
     }
-    */
-
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionHeaderView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        
+        return cell
+    }
+    
 }
