@@ -19,21 +19,27 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     @IBOutlet weak var collectionHeaderView: UICollectionView!
     
     
-    let timeAtNow = Date()
     var weatherdays : [WeatherDay] = []
     var weatherhours : [Weather24h] = []
-    let urlGif1 = "https://media1.giphy.com/media/qRY3cPYRkyQh2/giphy.gif" // mây giông
-    let urlGif2 = "https://media3.giphy.com/media/YNk9HRcH9zJfi/giphy.gif" // đêm
-    let urlGif3 = "https://media.giphy.com/media/l0Iy2x1FicLn45JGE/giphy.gif" // ngày
-    let urlGif4 = "https://media0.giphy.com/media/vB7WSUfplJahO/giphy.gif" // hoàng hôn
-    let urlGif5 = "https://media.giphy.com/media/ZMUibJXDlqbVC/giphy.gif" // bình minh
-    let urlGif6 = "https://media.giphy.com/media/l0Iy5fjHyedk9aDGU/giphy.gif" // mưa
-    let urlGif7 = "https://media.giphy.com/media/CufLv1T7gIPC/giphy.gif" //sét
-    let urlGif8 = "https://media0.giphy.com/media/qq5gwamAHVofm/giphy.gif" // mây
-    var check = 0
-    let arrHH = Array(4...5)
-    let arrDay = Array(6...23)
-    let arrNight =  Array(0...3)
+    
+    
+    let urlGif1 = "https://media1.giphy.com/media/qRY3cPYRkyQh2/giphy.gif" // mây giông //
+    let urlGif2 = "https://media3.giphy.com/media/YNk9HRcH9zJfi/giphy.gif" // đêm //
+    let urlGif3 = "https://media.giphy.com/media/l0Iy2x1FicLn45JGE/giphy.gif" // ngày //
+    let urlGif4 = "https://media0.giphy.com/media/vB7WSUfplJahO/giphy.gif" // hoàng hôn //
+    let urlGif5 = "https://media.giphy.com/media/ZMUibJXDlqbVC/giphy.gif" // bình minh //
+    let urlGif6 = "https://media.giphy.com/media/l0Iy5fjHyedk9aDGU/giphy.gif" // mưa //
+    let urlGif7 = "https://media.giphy.com/media/CufLv1T7gIPC/giphy.gif" //sét //
+    let urlGif8 = "https://media0.giphy.com/media/qq5gwamAHVofm/giphy.gif" // mây //
+    let urlGif9 = "https://media3.giphy.com/media/ZWRCWdUymIGNW/giphy.gif" // sương mù //
+    
+    
+    let timeAtNow = Date()
+    var checkWea = 0
+    let arrBM = Array(4...5)
+    let arrDay = Array(6...17)
+    let arrHH = 18
+    let arrNight = Array(19...23) + Array(0...3)
     
     
     override func viewDidLoad() {
@@ -59,6 +65,7 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
        
     }
     
+    
     @objc func handler1(){
         guard let weather = DataService.shared.weather else { return  }
         weatherdays = weather.weatherDays
@@ -66,17 +73,43 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
             nameText.text = "Hà Nội"
         }
         inforText.text = weather.text
+        if inforText.text == "Sương mù"{
+            checkWea = 0
+            getGif(urlString: urlGif9)
+            inforText.textColor = UIColor.black
+            nameText.textColor = UIColor.black
+            dateAtNow.textColor = UIColor.black
+        }
         if inforText.text == "Trời quang" || inforText.text == "Có mây"{
-            check = 1
+            checkWea  = 1
+            getGif(urlString: urlGif8)
+            inforText.textColor = UIColor.black
+            nameText.textColor = UIColor.black
+            dateAtNow.textColor = UIColor.black
         }
         if inforText.text == "Mưa nhẹ lả tả trong khu vực có sấm sét" || inforText.text == "Mưa vừa hoặc nặng hạt trong khu vực có sấm sét" {
-            check = 2
+            checkWea  = 2
+            getGif(urlString: urlGif7)
+            inforText.textColor = UIColor.white
+            nameText.textColor = UIColor.white
+            dateAtNow.textColor = UIColor.white
+
         }
         if inforText.text == "Các cơn giông tố nổi lên gần đó" {
-            check = 3
+            checkWea  = 3
+            getGif(urlString: urlGif1)
+            inforText.textColor = UIColor.white
+            nameText.textColor = UIColor.white
+            dateAtNow.textColor = UIColor.white
+
         }
-        if inforText.text == "Mưa lả tả gần" || inforText.text == "Mưa nhẹ" || inforText.text == "Mưa rào nhẹ" || inforText.text == "Mưa rào vừa hoặc nặng hạt"{
-            check = 4
+        if inforText.text == "Mưa lả tả gần" || inforText.text == "Mưa nhẹ" || inforText.text == "Mưa rào nhẹ" || inforText.text == "Mưa rào vừa hoặc nặng hạt" || inforText.text == "Thỉnh thoảng mưa vừa"{
+            checkWea  = 4
+            getGif(urlString: urlGif6)
+            inforText.textColor = UIColor.white
+            nameText.textColor = UIColor.white
+            dateAtNow.textColor = UIColor.white
+
         }
 
         
@@ -140,21 +173,48 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionHeaderView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         cell.timeAtNow.text = "\(toInt(from: weatherhours[indexPath.row + 1].time)!):00"
-        for i in arrHH {
-            if toInt(from: weatherhours[indexPath.row + 1].time) == i{
-                check = 5
-                getGif(urlString: urlGif4)
+        
+        for i in arrBM {
+            if toInt(from: weatherhours[indexPath.row + 1].time) == i {
+                if checkWea == 1 {
+                    getGif(urlString: urlGif5)
+                    inforText.textColor = UIColor.black
+                    nameText.textColor = UIColor.black
+                    dateAtNow.textColor = UIColor.black
+
+                }
             }
         }
         for i in arrDay {
             if toInt(from: weatherhours[indexPath.row + 1].time) == i{
-                check = 6
+                if checkWea == 1 {
+                    getGif(urlString: urlGif3)
+                    inforText.textColor = UIColor.black
+                    nameText.textColor = UIColor.black
+                    dateAtNow.textColor = UIColor.black
+
+                }
             }
         }
+        if toInt(from: weatherhours[indexPath.row + 1].time) == arrHH {
+            if checkWea == 1 {
+                getGif(urlString: urlGif4)
+                inforText.textColor = UIColor.white
+                nameText.textColor = UIColor.white
+                dateAtNow.textColor = UIColor.white
+
+            }
+        }
+        
         for i in arrNight {
             if toInt(from: weatherhours[indexPath.row + 1].time) == i{
-                check = 7
-                getGif(urlString: urlGif5)
+                if checkWea == 1 {
+                    getGif(urlString: urlGif2)
+                    inforText.textColor = UIColor.white
+                    nameText.textColor = UIColor.white
+                    dateAtNow.textColor = UIColor.white
+
+                }
             }
         }
         cell.iconHour.download(from: weatherhours[indexPath.row + 1].value)
@@ -184,10 +244,5 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
 
     }
 }
-//            inforText.textColor = UIColor.white
-//            nameText.textColor = UIColor.white
-//            dateAtNow.textColor = UIColor.white
 
-//            inforText.textColor = UIColor.black
-//            nameText.textColor = UIColor.black
-//            dateAtNow.textColor = UIColor.black
+

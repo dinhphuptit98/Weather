@@ -31,7 +31,7 @@
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="P3e-TH-Ozv"/>
                                             <constraint firstAttribute="width" constant="355" id="xB7-p7-sYm"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -109,7 +109,7 @@
                                                         <constraint firstAttribute="trailing" secondItem="xFi-tH-gGl" secondAttribute="trailing" constant="5" id="zNy-xv-IOx"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="0.41370903041744567" green="0.74337941258432361" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <connections>
                                                     <outlet property="date" destination="F9L-ZE-zCT" id="ihe-ON-WX2"/>
                                                     <outlet property="icon" destination="6Ou-tH-R6S" id="R6Z-oI-kzQ"/>
@@ -236,7 +236,7 @@
                                     </label>
                                 </subviews>
                             </view>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.24861338220596163" green="0.72767801510170549" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstItem="oRH-Xp-42Q" firstAttribute="top" secondItem="qha-cf-pyj" secondAttribute="bottom" constant="5" id="LMG-wK-upG"/>
                                 <constraint firstItem="qha-cf-pyj" firstAttribute="centerX" secondItem="r4n-aB-97d" secondAttribute="centerX" id="RsG-ty-tFJ"/>
