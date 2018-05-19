@@ -32,13 +32,11 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     let urlGif7 = "https://media.giphy.com/media/CufLv1T7gIPC/giphy.gif" //sét //
     let urlGif8 = "https://media0.giphy.com/media/qq5gwamAHVofm/giphy.gif" // mây //
     let urlGif9 = "https://media3.giphy.com/media/ZWRCWdUymIGNW/giphy.gif" // sương mù //
-    
+    let urlGif10 = "https://media.giphy.com/media/pUTySboTV9ZWo/giphy.gif"
     
     let timeAtNow = Date()
     var checkWea = 0
-    let arrBM = Array(4...5)
-    let arrDay = Array(6...17)
-    let arrHH = 18
+    
     let arrNight = Array(19...23) + Array(0...3)
     
     
@@ -60,7 +58,7 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         tempText.textColor = UIColor.yellow
         
         
-        
+       
         
        
     }
@@ -80,7 +78,7 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
             nameText.textColor = UIColor.black
             dateAtNow.textColor = UIColor.black
         }
-        if inforText.text == "Trời quang" || inforText.text == "Có mây"{
+        if inforText.text == "Trời quang" || inforText.text == "Có Mây"{
             checkWea  = 1
             getGif(urlString: urlGif8)
             inforText.textColor = UIColor.black
@@ -135,6 +133,7 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         cell.date.text = weatherdays[indexPath.row].date_epoch.toDate
         let toDay = Date()
@@ -145,13 +144,16 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
             cell.date.text = "HÔM NAY"
             cell.date.textColor = UIColor.red
         }
-
+        
         cell.minTemp.text = "\(weatherdays[indexPath.row].mintemp_c) ℃"
         cell.maxTemp.text = "\(weatherdays[indexPath.row].maxtemp_c) ℃"
         cell.icon.download(from: weatherdays[indexPath.row].icon)
         return cell
         
+        
     }
+    
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return collectionHeaderView
     }
@@ -173,50 +175,6 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionHeaderView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         cell.timeAtNow.text = "\(toInt(from: weatherhours[indexPath.row + 1].time)!):00"
-        
-        for i in arrBM {
-            if toInt(from: weatherhours[indexPath.row + 1].time) == i {
-                if checkWea == 1 {
-                    getGif(urlString: urlGif5)
-                    inforText.textColor = UIColor.black
-                    nameText.textColor = UIColor.black
-                    dateAtNow.textColor = UIColor.black
-
-                }
-            }
-        }
-        for i in arrDay {
-            if toInt(from: weatherhours[indexPath.row + 1].time) == i{
-                if checkWea == 1 {
-                    getGif(urlString: urlGif3)
-                    inforText.textColor = UIColor.black
-                    nameText.textColor = UIColor.black
-                    dateAtNow.textColor = UIColor.black
-
-                }
-            }
-        }
-        if toInt(from: weatherhours[indexPath.row + 1].time) == arrHH {
-            if checkWea == 1 {
-                getGif(urlString: urlGif4)
-                inforText.textColor = UIColor.white
-                nameText.textColor = UIColor.white
-                dateAtNow.textColor = UIColor.white
-
-            }
-        }
-        
-        for i in arrNight {
-            if toInt(from: weatherhours[indexPath.row + 1].time) == i{
-                if checkWea == 1 {
-                    getGif(urlString: urlGif2)
-                    inforText.textColor = UIColor.white
-                    nameText.textColor = UIColor.white
-                    dateAtNow.textColor = UIColor.white
-
-                }
-            }
-        }
         cell.iconHour.download(from: weatherhours[indexPath.row + 1].value)
         cell.tempCHour.text = "\(weatherhours[indexPath.row + 1].tempC)℃"
         
