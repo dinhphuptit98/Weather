@@ -78,7 +78,7 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
             nameText.textColor = UIColor.black
             dateAtNow.textColor = UIColor.black
         }
-        if inforText.text == "Trời quang" || inforText.text == "Có Mây"{
+        if inforText.text == "Nhiều nắng" || inforText.text == "Trời quang" || inforText.text == "Có Mây"{
             checkWea  = 1
             getGif(urlString: urlGif8)
             inforText.textColor = UIColor.black
@@ -134,21 +134,27 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
-        cell.date.text = weatherdays[indexPath.row].date_epoch.toDate
-        let toDay = Date()
-        let format = DateFormatter()
-        format.dateFormat = "YYYY-MMMM-d"
-        format.string(from: toDay)
-        if weatherdays[indexPath.row].date_epoch.toDay == format.string(from: toDay){
-            cell.date.text = "HÔM NAY"
-            cell.date.textColor = UIColor.red
+        if indexPath.row < 7 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
+            cell.date.text = weatherdays[indexPath.row].date_epoch.toDate
+            let toDay = Date()
+            let format = DateFormatter()
+            format.dateFormat = "YYYY-MMMM-d"
+            format.string(from: toDay)
+            if weatherdays[indexPath.row].date_epoch.toDay == format.string(from: toDay){
+                cell.date.text = "HÔM NAY"
+                cell.date.textColor = UIColor.red
+            }
+            
+            cell.minTemp.text = "\(weatherdays[indexPath.row].mintemp_c) ℃"
+            cell.maxTemp.text = "\(weatherdays[indexPath.row].maxtemp_c) ℃"
+            cell.icon.download(from: weatherdays[indexPath.row].icon)
+            return cell
+        } else {
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath) as! CustomTableViewCell2
+            cell2.speedCloud.text = "1"
+            return cell2
         }
-        
-        cell.minTemp.text = "\(weatherdays[indexPath.row].mintemp_c) ℃"
-        cell.maxTemp.text = "\(weatherdays[indexPath.row].maxtemp_c) ℃"
-        cell.icon.download(from: weatherdays[indexPath.row].icon)
-        return cell
         
         
     }
@@ -166,7 +172,7 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     // colectionView
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 2
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return weatherhours.count - 1 

@@ -30,18 +30,21 @@ struct Weather24h {
     var time : String
     var tempC : String
     var windspeedKmph : String
+    var winddir16Point : String
     var value : String
     
     init?(dict : DICT) {
         guard let time = dict["time"] as? String else { return nil }
         guard let tempC = dict["tempC"] as? String else { return nil }
         guard let windspeedKmph = dict["windspeedKmph"] as? String else { return nil }
+        guard let winddir16Point = dict["winddir16Point"]  as? String else { return nil }
         guard let weatherIconUrl = dict["weatherIconUrl"] as? [DICT] else { return nil  }
         guard let value = weatherIconUrl[0]["value"] as? String else { return nil }
         
         self.time = time
         self.tempC = tempC
         self.windspeedKmph = windspeedKmph
+        self.winddir16Point = winddir16Point
         self.value = value
     }
 }

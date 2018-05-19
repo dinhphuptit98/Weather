@@ -10,7 +10,6 @@ import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var backgCollectionView: UIImageView!
     @IBOutlet weak var timeAtNow: UILabel!
     @IBOutlet weak var iconHour: UIImageView!
     @IBOutlet weak var tempCHour: UILabel!
