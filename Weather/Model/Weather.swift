@@ -96,8 +96,6 @@ class Weather {
     var name: String
     var localtime_epoch: TimeInterval
     var temp_c: Double
-    var wind_kph: Double
-    var cloud: Double
     var text : String
     var icon : String
     
@@ -113,9 +111,8 @@ class Weather {
         // current
         guard let current = dict["current"] as? DICT else { return nil }
         
-        guard let cloud = current["cloud"] as? Double else { return nil }
         guard let temp_c = current["temp_c"] as? Double else { return nil }
-        guard let wind_kph = current["wind_kph"] as? Double else { return nil }
+        
         
         // condition trong current
         guard let condition = current["condition"] as? DICT else { return nil }
@@ -136,8 +133,6 @@ class Weather {
         self.name = name
         self.localtime_epoch = localtime_epoch
         self.temp_c = temp_c
-        self.wind_kph = wind_kph
-        self.cloud = cloud
         self.text = text
         self.icon = "http:"+icon
         

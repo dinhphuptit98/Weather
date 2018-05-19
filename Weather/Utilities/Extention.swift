@@ -21,4 +21,18 @@ extension UIImageView {
         }
     }
 }
-
+extension UIImageView {
+    func getGifCell(urlString : String) {
+        if let url = URL(string: urlString){
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async {
+                        self.image = UIImage.animatedImage(data: data)
+                    }
+                }
+                
+            }
+        }
+        
+    }
+}

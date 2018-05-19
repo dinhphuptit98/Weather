@@ -13,7 +13,6 @@ class TableViewCell: UITableViewCell {
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var minTemp: UILabel!
     @IBOutlet weak var maxTemp: UILabel!
-    
     @IBOutlet weak var icon: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,3 +26,4 @@ class TableViewCell: UITableViewCell {
     }
 
 }
+

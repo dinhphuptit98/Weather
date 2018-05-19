@@ -15,7 +15,6 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     @IBOutlet weak var inforText: UILabel!
     @IBOutlet weak var tempText: UILabel!
     @IBOutlet weak var backgr: UIImageView!
-    @IBOutlet weak var dateAtNow: UILabel!
     @IBOutlet weak var collectionHeaderView: UICollectionView!
     
     
@@ -32,12 +31,10 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     let urlGif7 = "https://media.giphy.com/media/CufLv1T7gIPC/giphy.gif" //sét //
     let urlGif8 = "https://media0.giphy.com/media/qq5gwamAHVofm/giphy.gif" // mây //
     let urlGif9 = "https://media3.giphy.com/media/ZWRCWdUymIGNW/giphy.gif" // sương mù //
-    let urlGif10 = "https://media.giphy.com/media/pUTySboTV9ZWo/giphy.gif"
+    let urlGif10 = "https://media.giphy.com/media/pUTySboTV9ZWo/giphy.gif" //cối xay gió
     
-    let timeAtNow = Date()
-    var checkWea = 0
-    
-    let arrNight = Array(19...23) + Array(0...3)
+    var speedWind : String?
+    var dirWind : String?
     
     
     override func viewDidLoad() {
@@ -54,7 +51,6 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         //layout colectionView
         collectionHeaderView.setup_horizotal(numberOfItems: 4, padding: 10)
         
-        dateAtNow.text = "\(timeAtNow)"
         tempText.textColor = UIColor.yellow
         
         
@@ -72,41 +68,36 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         }
         inforText.text = weather.text
         if inforText.text == "Sương mù"{
-            checkWea = 0
             getGif(urlString: urlGif9)
             inforText.textColor = UIColor.black
             nameText.textColor = UIColor.black
-            dateAtNow.textColor = UIColor.black
+            
         }
         if inforText.text == "Nhiều nắng" || inforText.text == "Trời quang" || inforText.text == "Có Mây"{
-            checkWea  = 1
             getGif(urlString: urlGif8)
             inforText.textColor = UIColor.black
             nameText.textColor = UIColor.black
-            dateAtNow.textColor = UIColor.black
+            
         }
         if inforText.text == "Mưa nhẹ lả tả trong khu vực có sấm sét" || inforText.text == "Mưa vừa hoặc nặng hạt trong khu vực có sấm sét" {
-            checkWea  = 2
             getGif(urlString: urlGif7)
             inforText.textColor = UIColor.white
             nameText.textColor = UIColor.white
-            dateAtNow.textColor = UIColor.white
+            
 
         }
         if inforText.text == "Các cơn giông tố nổi lên gần đó" {
-            checkWea  = 3
             getGif(urlString: urlGif1)
             inforText.textColor = UIColor.white
             nameText.textColor = UIColor.white
-            dateAtNow.textColor = UIColor.white
+            
 
         }
         if inforText.text == "Mưa lả tả gần" || inforText.text == "Mưa nhẹ" || inforText.text == "Mưa rào nhẹ" || inforText.text == "Mưa rào vừa hoặc nặng hạt" || inforText.text == "Thỉnh thoảng mưa vừa"{
-            checkWea  = 4
             getGif(urlString: urlGif6)
             inforText.textColor = UIColor.white
             nameText.textColor = UIColor.white
-            dateAtNow.textColor = UIColor.white
+            
 
         }
 
@@ -120,6 +111,8 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         guard let hour = DataService.shared.weatherOneDay else { return  }
         weatherhours = hour.weatherHours
         collectionHeaderView.reloadData()
+        speedWind = weatherhours[0].windspeedKmph
+        dirWind = weatherhours[0].winddir16Point
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -129,12 +122,12 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     
     // table View , show at cell
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return weatherdays.count
+        return 8
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.row < 7 {
+        if indexPath.row < weatherdays.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
             cell.date.text = weatherdays[indexPath.row].date_epoch.toDate
             let toDay = Date()
@@ -151,12 +144,12 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
             cell.icon.download(from: weatherdays[indexPath.row].icon)
             return cell
         } else {
-            let cell2 = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath) as! CustomTableViewCell2
-            cell2.speedCloud.text = "1"
-            return cell2
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath) as! CustomTableViewCell2
+            cell.cloudLabel.text = dirWind
+            cell.speedCloud.text = speedWind
+            cell.cloudImage.getGifCell(urlString: urlGif10)
+            return cell
         }
-        
-        
     }
     
     
@@ -166,14 +159,20 @@ class WeatherViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 150
     }
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        var hieght = 0
+        if indexPath.row == weatherdays.count {
+             hieght = 150
+        }else if indexPath.row < weatherdays.count {
+            hieght = 50
+        }
+        return CGFloat(hieght)
+    }
     
     
     // colectionView
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
-    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return weatherhours.count - 1 
     }
